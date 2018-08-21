@@ -1,0 +1,9 @@
+[alias]
+
+	stat = status
+	co = checkout
+	cm = commit -m
+
+[user]
+	name = Anders Jorve
+	email = ajorve@gmail.com	
