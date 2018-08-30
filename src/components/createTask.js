@@ -1,12 +1,15 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
+import React, { Component } from 'react'
+import Button from '@material-ui/core/Button'
+import AddIcon from '@material-ui/icons/Add'
 
-function createTask() {
-  return (
-    <Button variant="raised" color="primary">
-      Hello World
-    </Button>
-  );
+class CreateTask extends Component {
+  render () {
+    return (
+      <Button variant="fab" size="small" color="primary">
+        <AddIcon/>
+      </Button>
+    )
+  }
 }
 
-export default createTask
+export default CreateTask
