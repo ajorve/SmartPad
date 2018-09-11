@@ -17,7 +17,7 @@ class App extends Component {
     }
   }
 
-  componentWillMount () {
+  componentWillMount = () => {
     const previousTasks = this.state.tasks
 
     // DataSnapshot

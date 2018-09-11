@@ -3,24 +3,19 @@ import './Task.css'
 import PropTypes from 'prop-types'
 
 class Task extends Component {
-  constructor (props) {
-    super(props)
-    this.taskContent = props.taskContent
-    this.taskId = props.taskId
-  }
 
   handleRemoveTask = (id) => {
-    this.props.removetask(id)
+    this.props.removeTask(id)
   }
 
   render () {
     return (
       <div className="task fade-in">
         <span className="closebtn"
-          onClick={() => this.handleRemoveTask(this.taskId)}>
+          onClick={() => this.handleRemoveTask( this.props.taskId )}>
                       &times;
         </span>
-        <p className="taskContent">{ this.taskContent }</p>
+        <p className="taskContent">{ this.props.taskContent }</p>
       </div>
     )
   }

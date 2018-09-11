@@ -27,7 +27,7 @@ class TaskForm extends Component {
     return (
       <div className="taskWrapper">
         <input className="taskInput"
-          placeholder="Write a new task..."
+          placeholder="Write a new task...!"
           value={this.state.newTaskContent}
           onChange={this.handleUserInput} />
         <button className="taskButton"
