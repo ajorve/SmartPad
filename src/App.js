@@ -1,34 +1,83 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
-import CreateTask from './components/createTask'
-import { TableBody, TableRow } from '@material-ui/core'
+import Task from './Task/Task'
+import TaskForm from './TaskForm/TaskForm'
+import firebase from 'firebase'
+import 'firebase/database'
+import './App.css'
+import { DB_CONFIG } from './Task/firebase'
 
 class App extends Component {
+  constructor (props) {
+    super(props)
+    this.app = firebase.initializeApp(DB_CONFIG)
+    this.database = this.app.database().ref().child('tasks')
+
+    this.state = {
+      tasks: []
+    }
+  }
+
+  componentWillMount () {
+    const previousTasks = this.state.tasks
+
+    // DataSnapshot
+    this.database.on('child_added', snap => {
+      previousTasks.push({
+        id: snap.key,
+        taskContent: snap.val().taskContent
+      })
+
+      this.setState({
+        tasks: previousTasks
+      })
+    })
+
+    this.database.on('child_removed', snap => {
+      for (var i = 0; i < previousTasks.length; i++) {
+        if (previousTasks[i].id === snap.key) {
+          previousTasks.splice(i, 1)
+        }
+      }
+
+      this.setState({
+        tasks: previousTasks
+      })
+    })
+  }
+
+  addTask = (task) => {
+    this.database.push().set({ taskContent: task })
+  }
+
+  removeTask = (taskId) => {
+    console.log('from the parent: ' + taskId)
+    this.database.child(taskId).remove()
+  }
+
   render () {
     return (
-      <div>
-        <Paper elevation={2} align="center">
-          <Typography variant="headline" component="h2">
-          SmartPad
-          </Typography>
-          <CreateTask/>
-          <TableBody>
-            <TableRow>
-              <Typography align="center" component="p">
-
-              </Typography>
-            </TableRow>
-          </TableBody>
-        </Paper>
+      <div className="taskWrapper">
+        <div className="taskHeader">
+          <div className="heading">React SmartPad</div>
+        </div>
+        <div className="taskAdder">
+          <TaskForm addTask={this.addTask} />
+        </div>
+        <div className="taskBody">
+          {
+            this.state.tasks.map((task) => {
+              return (
+                <Task taskContent={task.taskContent}
+                  taskId={task.id}
+                  key={task.id}
+                  removeTask ={this.removeTask}/>
+              )
+            })
+          }
+        </div>
       </div>
     )
   }
-}
-
-App.propTypes = {
-  classes: PropTypes.object.isRequired
 }
 
 export default App
